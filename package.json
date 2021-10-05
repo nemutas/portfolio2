@@ -8,11 +8,19 @@
     "start": "next start"
   },
   "dependencies": {
+    "@emotion/react": "^11.4.1",
+    "csx": "^10.0.2",
+    "framer-motion": "^4.1.17",
     "next": "11.1.2",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "react-tsparticles": "^1.35.3",
+    "react-xarrows": "^2.0.2",
+    "sanitize.css": "^13.0.0"
   },
   "devDependencies": {
+    "@emotion/babel-plugin": "^11.3.0",
+    "@emotion/babel-preset-css-prop": "^11.2.0",
     "@types/react": "17.0.27",
     "typescript": "4.4.3"
   }

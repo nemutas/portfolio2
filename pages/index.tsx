@@ -63,7 +63,7 @@ const styles = {
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		/* border: 2px solid #44b3c2; */
+		border: 2px solid #44b3c2;
 	`,
 	text: css`
 		font-size: 5rem;

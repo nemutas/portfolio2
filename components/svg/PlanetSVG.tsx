@@ -74,6 +74,6 @@ const AnimationCircle: VFC<AnimationCircleProps> = props => {
 
 const styles = {
 	group: css`
-		filter: drop-shadow(10px 10px 0px rgba(0, 0, 0, 0.5));
+		filter: drop-shadow(10px 10px 0 rgba(0, 0, 0, 0.5));
 	`
 }

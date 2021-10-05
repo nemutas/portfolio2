@@ -53,6 +53,12 @@ const styles = {
 		justify-content: center;
 		align-items: center;
 		overflow: hidden;
+		transition: box-shadow 0.5s;
+
+		&:hover {
+			box-shadow: 0 0 100px 100px ${color('#F6D04D').fade(0.8).toString()};
+			transition: box-shadow 0.2s;
+		}
 	`,
 	logo: css`
 		position: relative;

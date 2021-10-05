@@ -39,6 +39,12 @@ const styles = {
 		justify-content: center;
 		align-items: center;
 		animation: ${animaions.rotate} 20s linear infinite;
+		transition: box-shadow 0.5s;
+
+		&:hover {
+			box-shadow: 0 0 100px 100px ${color('#1da4f7').fade(0.8).toString()};
+			transition: box-shadow 0.2s;
+		}
 	`,
 	bird: css`
 		position: absolute;

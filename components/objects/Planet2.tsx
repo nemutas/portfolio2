@@ -1,11 +1,11 @@
 import React, { VFC } from 'react';
 import { css, keyframes } from '@emotion/react';
-import { PlanetSVG } from '../svg/PlanetSVG';
+import { Planet2SVG } from '../svg/Planet2SVG';
 
-export const Planet: VFC = () => {
+export const Planet2: VFC = () => {
 	return (
 		<div css={styles.object}>
-			<PlanetSVG />
+			<Planet2SVG />
 		</div>
 	)
 }
@@ -16,7 +16,7 @@ const animations = {
       transform: translateY(0);
     }
     50% {
-      transform: translateY(100px);
+      transform: translateY(-100px);
     }
   `
 }
@@ -24,8 +24,8 @@ const animations = {
 const styles = {
 	object: css`
 		position: relative;
-		width: 250px;
-		height: 250px;
+		width: 150px;
+		height: 150px;
 		animation: ${animations.updown} 10s ease-in-out infinite;
 	`
 }

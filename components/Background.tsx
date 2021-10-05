@@ -29,7 +29,7 @@ type ParticleParams = {
 	size: number // px
 	color: string
 	isTwinkle: boolean
-	twinkleDuration: number // s
+	twinkleDuration: number // sec
 }
 
 type ParticleProps = {

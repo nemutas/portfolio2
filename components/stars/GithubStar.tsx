@@ -1,17 +1,16 @@
-import { color } from 'csx';
 import React, { VFC } from 'react';
 import { css, keyframes } from '@emotion/react';
 import { GithubSVG } from '../svg/GithubSVG';
-import { OuterLinkStarLayout } from './OuterLinkStarLayout';
+import { StarLayout } from './StarLayout';
 
 export const GithubStar: VFC = () => {
 	return (
-		<OuterLinkStarLayout url={'https://github.com/nemutas'} color={'#fff'} isReverseRotation>
+		<StarLayout url={'https://github.com/nemutas'} color={'#fff'} rotateTo={-360}>
 			<div css={styles.ring} />
 			<div css={styles.octo}>
 				<GithubSVG />
 			</div>
-		</OuterLinkStarLayout>
+		</StarLayout>
 	)
 }
 

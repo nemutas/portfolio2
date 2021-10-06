@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { AppStar } from './AppStar';
 import { GithubStar } from './GithubStar';
 import { LinkPath } from './LinkPath';
-import { ProfileStar } from './ProfileStar';
+import { LinkedProfileStar } from './ProfileStar';
 import { QiitaStar } from './QiitaStar';
 import { TwitterStar } from './TwitterStar';
 
@@ -16,8 +16,8 @@ export const Stars: VFC = () => {
 
 	return (
 		<>
-			<div ref={profileRef}>
-				<ProfileStar />
+			<div ref={profileRef} css={styles.profile}>
+				<LinkedProfileStar />
 			</div>
 			<div ref={githubRef} css={styles.github}>
 				<GithubStar />
@@ -40,6 +40,7 @@ export const Stars: VFC = () => {
 }
 
 const styles = {
+	profile: css``,
 	github: css`
 		position: absolute;
 		top: 20%;

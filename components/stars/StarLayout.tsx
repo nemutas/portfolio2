@@ -1,18 +1,24 @@
 import { color } from 'csx';
+import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState, VFC } from 'react';
+import { useSetRecoilState } from 'recoil';
 import { css, keyframes } from '@emotion/react';
-import { QiitaSVG } from '../svg/QiitaSVG';
+import { starCenterPosition } from '../../libs/store';
 
-type OuterLinkStarLayoutProps = {
-	url: string
+type StarLayoutProps = {
+	url?: string
+	href?: string
 	color: string
 	children: React.ReactNode
-	isReverseRotation?: boolean
+	rotateTo?: 360 | -360
+	autoCloseActiveScreen?: boolean
 }
 
-export const OuterLinkStarLayout: VFC<OuterLinkStarLayoutProps> = props => {
-	const { url, color, children, isReverseRotation = false } = props
+export const StarLayout: VFC<StarLayoutProps> = props => {
+	const { url, href, color, children, rotateTo, autoCloseActiveScreen = true } = props
 
+	const router = useRouter()
+	const setStarCenterPosition = useSetRecoilState(starCenterPosition)
 	const screenRef = useRef<HTMLDivElement>(null)
 	const [active, setActive] = useState(false)
 	const activeRef = useRef(false)
@@ -43,17 +49,29 @@ export const OuterLinkStarLayout: VFC<OuterLinkStarLayoutProps> = props => {
 		screenRef.current!.ontransitionend = () => {
 			activeRef.current = !activeRef.current
 			if (activeRef.current) {
+				// 0.5秒後にページ遷移する
 				window.setTimeout(() => {
-					// 0.5秒後にページ遷移する
-					window.open(url, '_blank')
-					setActive(false)
+					// 恒星の位置を記憶する
+					const rect = screenRef.current!.getBoundingClientRect()
+					const top = rect.top + rect.height / 2
+					const left = rect.left + rect.width / 2
+					setStarCenterPosition({ top, left })
+
+					// 外部サイトへ
+					if (url) window.open(url, '_blank')
+					// 他ページへ
+					else if (href) router.push(href)
+
+					autoCloseActiveScreen && setActive(false)
 				}, 500)
 			}
 		}
 	}, [])
 
 	return (
-		<div css={styles.star(color, isReverseRotation)} onClick={clickHandler}>
+		<div
+			css={[styles.star(color), rotateTo && styles.rotateAnimation(rotateTo)]}
+			onClick={clickHandler}>
 			<div
 				ref={screenRef}
 				css={[styles.screen(color), active && styles.activeScreen(radius.current * 2)]}
@@ -64,26 +82,18 @@ export const OuterLinkStarLayout: VFC<OuterLinkStarLayoutProps> = props => {
 }
 
 const animaions = {
-	rotate: keyframes`
+	rotate: (rotate: number) => keyframes`
     0% {
       transform: rotate(0deg);
     }
     100% {
-      transform: rotate(360deg);
-    }
-  `,
-	rotateRevarse: keyframes`
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(-360deg);
+      transform: rotate(${rotate}deg);
     }
   `
 }
 
 const styles = {
-	star: (themeColor: string, isReverseRotation: boolean) => css`
+	star: (themeColor: string) => css`
 		position: relative;
 		width: 200px;
 		height: 200px;
@@ -94,13 +104,17 @@ const styles = {
 		justify-content: center;
 		align-items: center;
 		cursor: pointer;
-		animation: ${isReverseRotation ? animaions.rotateRevarse : animaions.rotate} 20s linear infinite;
+		z-index: 0;
 		transition: box-shadow 0.5s;
 
 		&:hover {
+			z-index: 10;
 			box-shadow: 0 0 100px 100px ${color(themeColor).fade(0.8).toString()};
 			transition: box-shadow 0.2s;
 		}
+	`,
+	rotateAnimation: (rotate: number) => css`
+		animation: ${animaions.rotate(rotate)} 20s linear infinite;
 	`,
 	screen: (themeColor: string) => css`
 		position: absolute;

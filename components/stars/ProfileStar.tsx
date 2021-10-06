@@ -1,6 +1,14 @@
-import { color } from 'csx';
 import React, { VFC } from 'react';
 import { css, keyframes } from '@emotion/react';
+import { StarLayout } from './StarLayout';
+
+export const LinkedProfileStar: VFC = () => {
+	return (
+		<StarLayout color={'#f6d04d'} href="/profile" autoCloseActiveScreen={false}>
+			<ProfileStar />
+		</StarLayout>
+	)
+}
 
 export const ProfileStar: VFC = () => {
 	const textSplit = (text: string, color: string) => {
@@ -13,7 +21,7 @@ export const ProfileStar: VFC = () => {
 	const text = [...mainText, ...subText]
 
 	return (
-		<div css={styles.star}>
+		<>
 			{/* text */}
 			<div css={styles.text}>
 				{text.map((obj, i) => (
@@ -26,7 +34,7 @@ export const ProfileStar: VFC = () => {
 			<div css={styles.logo}>
 				<img css={styles.img} src="/assets/avatar.jpg" alt="" draggable={false} />
 			</div>
-		</div>
+		</>
 	)
 }
 
@@ -42,24 +50,6 @@ const animations = {
 }
 
 const styles = {
-	star: css`
-		position: relative;
-		width: 200px;
-		height: 200px;
-		border-radius: 50%;
-		background-color: #f6d04d;
-		box-shadow: 0 0 50px 50px ${color('#F6D04D').fade(0.5).toString()};
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		overflow: hidden;
-		transition: box-shadow 0.5s;
-
-		&:hover {
-			box-shadow: 0 0 100px 100px ${color('#F6D04D').fade(0.8).toString()};
-			transition: box-shadow 0.2s;
-		}
-	`,
 	logo: css`
 		position: relative;
 		width: 70%;

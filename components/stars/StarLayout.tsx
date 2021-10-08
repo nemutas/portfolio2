@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState, VFC } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { css, keyframes } from '@emotion/react';
 import { starCenterPosition } from '../../libs/store';
+import { calcMaxLengthToScreenCorner } from '../../libs/utils';
 
 type StarLayoutProps = {
 	url?: string
@@ -25,23 +26,7 @@ export const StarLayout: VFC<StarLayoutProps> = props => {
 	const radius = useRef(0)
 
 	const clickHandler = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-		const toTopLeftLength = Math.sqrt(Math.pow(0 - e.clientX, 2) + Math.pow(0 - e.clientY, 2))
-		const toBottomLeftLength = Math.sqrt(
-			Math.pow(0 - e.clientX, 2) + Math.pow(window.innerHeight - e.clientY, 2)
-		)
-		const toTopRightLength = Math.sqrt(
-			Math.pow(window.innerWidth - e.clientX, 2) + Math.pow(0 - e.clientY, 2)
-		)
-		const toBottomRightLength = Math.sqrt(
-			Math.pow(window.innerWidth - e.clientX, 2) + Math.pow(window.innerHeight - e.clientY, 2)
-		)
-		radius.current = Math.max(
-			toTopLeftLength,
-			toBottomLeftLength,
-			toTopRightLength,
-			toBottomRightLength
-		)
-
+		radius.current = calcMaxLengthToScreenCorner(e.clientX, e.clientY)
 		setActive(!active)
 	}
 
@@ -53,9 +38,9 @@ export const StarLayout: VFC<StarLayoutProps> = props => {
 				window.setTimeout(() => {
 					// 恒星の位置を記憶する
 					const rect = screenRef.current!.getBoundingClientRect()
-					const top = rect.top + rect.height / 2
-					const left = rect.left + rect.width / 2
-					setStarCenterPosition({ top, left })
+					const x = rect.x + rect.width / 2
+					const y = rect.y + rect.height / 2
+					setStarCenterPosition({ x, y })
 
 					// 外部サイトへ
 					if (url) window.open(url, '_blank')

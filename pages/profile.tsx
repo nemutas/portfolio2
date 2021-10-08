@@ -1,165 +1,173 @@
 import anime from 'animejs';
-import { motion } from 'framer-motion';
+import { color } from 'csx';
 import { useRouter } from 'next/router';
-import React, { memo, useEffect, useRef, VFC } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState, VFC } from 'react';
 import { useRecoilState } from 'recoil';
 import { css, SerializedStyles } from '@emotion/react';
 import { Layout } from '../components/layouts/Layout';
+import { Career } from '../components/profilePages/Career';
+import { Idea } from '../components/profilePages/Idea';
+import { Skill } from '../components/profilePages/Skill';
 import { ProfileStar } from '../components/stars/ProfileStar';
 import { starCenterPosition } from '../libs/store';
 
 const Profile: VFC = () => {
 	const [logoStartCenterPosition, setLogoStartCenterPosition] = useRecoilState(starCenterPosition)
 	const router = useRouter()
-	const containerRef = useRef<HTMLDivElement>(null)
 	const logoRef = useRef<HTMLDivElement>(null)
-	const skillRef = useRef<HTMLDivElement>(null)
-	const careerRef = useRef<HTMLDivElement>(null)
-	const ideaRef = useRef<HTMLDivElement>(null)
 
-	useEffect(() => {
-		const rect = logoRef.current!.getBoundingClientRect()
-		const isMoving = logoStartCenterPosition.top && logoStartCenterPosition.left
+	useLayoutEffect(() => {
+		const isMoving = logoStartCenterPosition.x && logoStartCenterPosition.y
 
 		if (isMoving) {
-			// homeから移動してきたとき
-			logoRef.current!.style.top = logoStartCenterPosition.top! - rect.height / 2 + 'px'
-			logoRef.current!.style.left = logoStartCenterPosition.left! - rect.width / 2 + 'px'
-		} else {
-			// /profileを直接開いたとき（再読み込みしたとき）
-			logoRef.current!.style.top = 50 + 'px'
-			logoRef.current!.style.left = 50 + 'px'
+			logoRef.current!.style.top = `${logoStartCenterPosition.y}px`
+			logoRef.current!.style.left = `${logoStartCenterPosition.x}px`
 		}
 
-		const tl = anime.timeline({ duration: 500 })
-
+		const tl = anime.timeline({
+			duration: 200
+		})
 		tl.add({
 			targets: '#profile-logo',
-			left: 50,
-			top: 50,
-			easing: 'easeInOutSine',
-			delay: 200,
-			duration: () => (isMoving ? 1000 : 1)
+			boxShadow: '0 0 10px 15px rgba(0, 0, 0, 0.2)',
+			delay: 200
 		})
 			.add({
-				targets: '#profile-skill',
-				scale: [0, 1]
+				targets: '#profile-logo',
+				top: 0,
+				left: 0,
+				easing: 'easeInOutSine',
+				duration: () => (isMoving ? 1000 : 0),
+				delay: () => (isMoving ? 200 : 0)
 			})
 			.add({
-				targets: '#profile-career',
-				scale: [0, 1]
+				targets: '#profile-text-line',
+				width: ['0%', '100%'],
+				easing: 'easeOutQuint',
+				duration: 2000
 			})
 			.add({
-				targets: '#profile-idea',
+				targets: '#profile-text-main',
+				translateY: [100, 0],
+				opacity: [0, 1],
+				duration: 1500
+			})
+			.add({
+				targets: '#profile-text-sub',
+				translateY: [-100, 0],
+				opacity: [0, 1],
+				duration: 1000
+			})
+			.add({
+				targets: [
+					'#profile-skill-button',
+					'#profile-career-button',
+					'#profile-idea-button',
+					'#profile-skill-sheet',
+					'#profile-career-sheet',
+					'#profile-idea-sheet'
+				],
 				scale: [0, 1]
 			})
-
-		tl.complete = () => setLogoStartCenterPosition({ top: undefined, left: undefined })
+		tl.complete = () => setLogoStartCenterPosition({ x: undefined, y: undefined })
 	}, [])
 
-	const onLogoClickHandler = () => {
-		router.push('/')
+	/** logoをクリックしたとき（アニメーション実行後、homeへ戻る） */
+	const logoClickHandler = () => {
+		const rect = logoRef.current!.getBoundingClientRect()
+		logoRef.current!.style.zIndex = '10'
+		anime({
+			targets: '#profile-logo',
+			translateX: window.innerWidth / 2 - rect.width / 2,
+			translateY: window.innerHeight / 2 - rect.height / 2,
+			easing: 'easeInOutSine',
+			duration: 1000
+		})
+
+		setTimeout(() => {
+			router.push('/')
+		}, 1200)
 	}
 
 	return (
 		<Layout title="Profile｜Portforio">
-			<motion.div ref={containerRef} css={styles.container}>
-				{/* logo */}
-				<DraggableLayout
-					id="profile-logo"
-					ownRef={logoRef}
-					dragConstraintsRef={containerRef}
-					style={[styles.logo]}
-					clickHandler={onLogoClickHandler}>
+			<div css={styles.container}>
+				<ProfileText />
+				<div id="profile-logo" ref={logoRef} css={styles.logo} onClick={logoClickHandler}>
 					<ProfileStar />
-				</DraggableLayout>
-				{/* circle */}
-				<CategoryCircle
+				</div>
+				<CategoryLayout
 					id="profile-skill"
-					ownRef={skillRef}
-					dragConstraintsRef={containerRef}
-					text="Skill"
-					style={styles.skill}
-				/>
-				<CategoryCircle
+					buttonStyle={styles.skillButton}
+					sheetStyle={styles.skillSheet}>
+					<Skill />
+				</CategoryLayout>
+				<CategoryLayout
 					id="profile-career"
-					ownRef={careerRef}
-					dragConstraintsRef={containerRef}
-					text="Career"
-					style={styles.career}
-				/>
-				<CategoryCircle
+					buttonStyle={styles.careerButton}
+					sheetStyle={styles.careerSheet}>
+					<Career />
+				</CategoryLayout>
+				<CategoryLayout
 					id="profile-idea"
-					ownRef={ideaRef}
-					dragConstraintsRef={containerRef}
-					text="Idea"
-					style={styles.idea}
-				/>
-			</motion.div>
+					buttonStyle={styles.ideaButton}
+					sheetStyle={styles.ideaSheet}>
+					<Idea />
+				</CategoryLayout>
+			</div>
 		</Layout>
 	)
 }
 export default Profile
 
 // ==============================================
-type CategoryCircleProps = {
-	id: string
-	ownRef: React.RefObject<HTMLDivElement>
-	dragConstraintsRef: React.RefObject<HTMLDivElement>
-	text: string
-	style: SerializedStyles
+const ProfileText: VFC = () => {
+	return (
+		<div css={styles.textContainer}>
+			<div id="profile-text-main" css={styles.mainText}>
+				Hi. I am <span style={{ color: '#db0063' }}>Nemutas</span>.
+			</div>
+			<div id="profile-text-line" css={styles.textLine} />
+			<div id="profile-text-sub" css={styles.subText}>
+				Web Frontend Engineer
+			</div>
+		</div>
+	)
 }
 
-const CategoryCircle: VFC<CategoryCircleProps> = memo(props => {
-	const { text, style, ...params } = props
-
-	return (
-		<DraggableLayout style={[styles.circle, style]} {...params}>
-			{text}
-		</DraggableLayout>
-	)
-})
-
 // ==============================================
-type DraggableLayoutProps = {
+type CategoryLayout = {
 	id: string
-	ownRef: React.RefObject<HTMLDivElement>
-	dragConstraintsRef: React.RefObject<HTMLDivElement>
-	style: SerializedStyles[]
-	clickHandler?: () => void
+	buttonStyle: SerializedStyles
+	sheetStyle: SerializedStyles
 	children: React.ReactNode
 }
 
-const DraggableLayout: VFC<DraggableLayoutProps> = props => {
-	const { id, ownRef, dragConstraintsRef, style, clickHandler, children } = props
-	const enabledClickRef = useRef(true)
+const CategoryLayout: VFC<CategoryLayout> = props => {
+	const { id, buttonStyle, sheetStyle, children } = props
+	const buttonRef = useRef<HTMLDivElement>(null)
+	const sheetRef = useRef<HTMLDivElement>(null)
+	const paperRef = useRef<HTMLDivElement>(null)
 
-	const dragEndHandler = () => {
-		// drag終了直後は、clickイベントを発生させない
-		enabledClickRef.current = false
-		setTimeout(() => {
-			enabledClickRef.current = true
-		}, 100)
-	}
-
-	const motionDivClickHandler = () => {
-		if (enabledClickRef.current && clickHandler) {
-			clickHandler()
-		}
+	const categoryClickHandler = () => {
+		buttonRef.current!.classList.toggle('active')
+		sheetRef.current!.classList.toggle('active')
 	}
 
 	return (
-		<motion.div
-			id={id}
-			ref={ownRef}
-			css={style}
-			drag
-			dragPropagation
-			dragConstraints={dragConstraintsRef}
-			onDragEnd={dragEndHandler}
-			onClick={motionDivClickHandler}>
-			{children}
-		</motion.div>
+		<>
+			<div id={`${id}-sheet`} ref={sheetRef} css={[styles.spreadSheet, sheetStyle]}>
+				<div ref={paperRef} css={styles.paper}>
+					{children}
+				</div>
+			</div>
+			<div
+				id={`${id}-button`}
+				ref={buttonRef}
+				css={[styles.categoryButton, buttonStyle]}
+				onClick={categoryClickHandler}
+			/>
+		</>
 	)
 }
 
@@ -169,7 +177,6 @@ const styles = {
 		position: relative;
 		width: 100vw;
 		height: 100vh;
-		padding: 5em;
 		background-color: #f6d04d;
 		display: flex;
 		justify-content: center;
@@ -177,44 +184,147 @@ const styles = {
 	`,
 	logo: css`
 		position: absolute;
+		top: 0;
+		left: 0;
 		width: 200px;
 		height: 200px;
 		border-radius: 50%;
 		background-color: #f6d04d;
+		transform: translate(-50%, -50%);
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		cursor: pointer;
 		z-index: 1;
 	`,
-	circle: css`
+	categoryButton: css`
 		position: absolute;
-		width: 150px;
-		height: 150px;
-		border-radius: 50%;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
-		color: white;
-		font-size: 3rem;
+		width: 100px;
+		height: 100px;
 		cursor: pointer;
 		transform: scale(0);
-		z-index: 2;
+		transition: 0.2s linear;
+
+		&.active {
+			width: 90px;
+			height: 90px;
+			z-index: 5;
+			background-image: url('/assets/close.svg');
+		}
 	`,
-	skill: css`
-		bottom: 10%;
-		left: 30%;
+	spreadSheet: css`
+		position: absolute;
+		width: 90px;
+		height: 90px;
+		overflow: hidden;
+		transform: scale(0);
+		transition: 0.8s;
+
+		&.active {
+			width: 100%;
+			height: 100%;
+			border-radius: 0;
+			z-index: 2;
+		}
+	`,
+	skillButton: css`
+		bottom: 0;
+		left: 0;
+		border-top-right-radius: 100%;
 		background-color: #2694ab;
+		box-shadow: 5px -5px 10px 10px rgba(0, 0, 0, 0.2);
+		transform-origin: bottom left;
+		/* icon */
+		background-image: url('/assets/skill.svg');
+		background-size: 50px 50px;
+		background-position: bottom 10px left 10px;
+
+		&.active {
+			background-color: ${color('#2694ab').lighten(0.05).toString()};
+			box-shadow: 2px -2px 5px 5px rgba(0, 0, 0, 0.2);
+			background-position: bottom 5px left 5px;
+		}
 	`,
-	career: css`
-		top: 10%;
-		right: 40%;
+	skillSheet: css`
+		bottom: 0;
+		left: 0;
+		border-top-right-radius: 100%;
+		background-color: #2694ab;
+		transform-origin: bottom left;
+	`,
+	careerButton: css`
+		top: 0;
+		right: 0;
+		border-bottom-left-radius: 100%;
 		background-color: #de4307;
+		box-shadow: -5px 5px 10px 10px rgba(0, 0, 0, 0.2);
+		transform-origin: top right;
+		/* icon */
+		background-image: url('/assets/career.svg');
+		background-size: 50px 50px;
+		background-position: top 10px right 10px;
+
+		&.active {
+			background-color: ${color('#de4307').lighten(0.05).toString()};
+			box-shadow: -2px 2px 5px 5px rgba(0, 0, 0, 0.2);
+			background-position: top 5px right 5px;
+		}
 	`,
-	idea: css`
-		bottom: 40%;
-		right: 10%;
+	careerSheet: css`
+		top: 0;
+		right: 0;
+		border-bottom-left-radius: 100%;
+		background-color: #de4307;
+		transform-origin: top right;
+	`,
+	ideaButton: css`
+		bottom: 0;
+		right: 0;
+		border-top-left-radius: 100%;
 		background-color: #588133;
+		box-shadow: -5px -5px 10px 10px rgba(0, 0, 0, 0.2);
+		transform-origin: bottom right;
+		/* icon */
+		background-image: url('/assets/idea.svg');
+		background-size: 50px 50px;
+		background-position: bottom 10px right 10px;
+
+		&.active {
+			background-color: ${color('#588133').lighten(0.05).toString()};
+			box-shadow: -2px -2px 5px 5px rgba(0, 0, 0, 0.2);
+			background-position: bottom 5px right 5px;
+		}
+	`,
+	ideaSheet: css`
+		bottom: 0;
+		right: 0;
+		border-top-left-radius: 100%;
+		background-color: #588133;
+		transform-origin: bottom right;
+	`,
+	paper: css`
+		position: relative;
+		width: 100%;
+		height: 100%;
+	`,
+	textContainer: css`
+		position: relative;
+		display: grid;
+		grid-template-rows: auto auto auto;
+	`,
+	mainText: css`
+		font-size: max(5vw, 3rem);
+		color: #1e1e1e;
+		padding-right: max(5vw, 10px);
+	`,
+	subText: css`
+		font-size: max(3vw, 2rem);
+		color: #1e1e1e;
+		padding-right: 50px;
+	`,
+	textLine: css`
+		width: 100%;
+		height: max(0.3vw, 2px);
+		background-color: #1e1e1e;
 	`
 }

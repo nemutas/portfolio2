@@ -16,7 +16,7 @@ export const ProfileStar: VFC = () => {
 			return { char, color }
 		})
 	}
-	const mainText = textSplit('Nemutas', '#DB0063')
+	const mainText = textSplit('Nemutas', '#db0063')
 	const subText = textSplit('｜Web Frontend Engineer', '#1e1e1e')
 	const text = [...mainText, ...subText]
 

@@ -1,11 +1,11 @@
 import { atom } from 'recoil';
 
 type StarCenterPosition = {
-	top: number | undefined
-	left: number | undefined
+	x: number | undefined
+	y: number | undefined
 }
 
 export const starCenterPosition = atom<StarCenterPosition>({
 	key: 'star-center-position',
-	default: { top: undefined, left: undefined }
+	default: { x: undefined, y: undefined }
 })

@@ -1,8 +1,34 @@
-import React, { VFC } from 'react';
+import React, { useEffect, useRef, useState, VFC } from 'react';
 import { css } from '@emotion/react';
 import { skills } from '../../resources/skill';
 
 export const Skill: VFC = () => {
+	const tooltipRef = useRef<HTMLDivElement>(null)
+	const hoveredIconNameRef = useRef('')
+
+	useEffect(() => {
+		const mousemoveHandler = (e: MouseEvent) => {
+			// ツールチップの表示設定
+			const tooltipElem = tooltipRef.current!
+			// テキストの設定
+			tooltipElem.innerHTML = `<span>${hoveredIconNameRef.current}</span>`
+			if (hoveredIconNameRef.current) {
+				tooltipElem.style.padding = '5px 15px'
+			} else {
+				tooltipElem.style.padding = '0px'
+			}
+			// 位置の計算
+			const rect = tooltipElem.getBoundingClientRect()
+			const x = e.clientX - rect.width / 2
+			const y = e.clientY - rect.height - 5
+			tooltipElem.style.top = `${y}px`
+			tooltipElem.style.left = `${x}px`
+		}
+		window.addEventListener('mousemove', mousemoveHandler)
+
+		return () => window.removeEventListener('mousemove', mousemoveHandler)
+	}, [])
+
 	return (
 		<div css={styles.container}>
 			<div css={styles.paper}>
@@ -17,10 +43,12 @@ export const Skill: VFC = () => {
 				{skills.map((skill, i) => (
 					<div key={i}>
 						<div css={styles.groupText}>{skill.title}</div>
-						<Icons filenames={skill.iconNames} />
+						<Icons filenames={skill.iconNames} hoveredIconNameRef={hoveredIconNameRef} />
 					</div>
 				))}
 			</div>
+			{/* tooltip */}
+			<div ref={tooltipRef} css={styles.tooltip} />
 		</div>
 	)
 }
@@ -28,15 +56,31 @@ export const Skill: VFC = () => {
 // ==============================================
 type IconsProps = {
 	filenames: string[]
+	hoveredIconNameRef: React.MutableRefObject<string>
 }
 
 const Icons: VFC<IconsProps> = props => {
-	const { filenames } = props
+	const { filenames, hoveredIconNameRef } = props
+
+	const mouseenterHandler = (name: string) => {
+		hoveredIconNameRef.current = name
+	}
+
+	const mouseleaveHandler = () => {
+		hoveredIconNameRef.current = ''
+	}
 
 	return (
 		<div css={styles.iconContainer}>
 			{filenames.map((name, i) => (
-				<img key={i} src={`/assets/icons/${name}.svg`} height="50px" alt="" />
+				<img
+					key={i}
+					src={`/assets/icons/${name}.svg`}
+					height="50px"
+					alt=""
+					onMouseEnter={() => mouseenterHandler(name)}
+					onMouseLeave={mouseleaveHandler}
+				/>
 			))}
 		</div>
 	)
@@ -96,5 +140,17 @@ const styles = {
 	imageContainer: css`
 		position: relative;
 		height: 50px;
+	`,
+	tooltip: css`
+		position: absolute;
+		top: 0;
+		left: 0;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-size: 1.5rem;
+		color: white;
+		background-color: rgba(0, 0, 0, 0.4);
+		z-index: 1;
 	`
 }

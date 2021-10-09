@@ -129,6 +129,7 @@ const styles = {
 	`,
 	groupText: css`
 		font-size: clamp(2.5rem, 3vw, 4rem);
+		/* font-size: clamp(2rem, 2vw, 3rem); */
 		margin-bottom: 10px;
 	`,
 	iconContainer: css`

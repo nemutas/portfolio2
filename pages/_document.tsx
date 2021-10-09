@@ -3,9 +3,10 @@
 import Document, { Head, Html, Main, NextScript } from 'next/document';
 import React from 'react';
 
-const url = ''
-const title = ''
-const description = ''
+const url = 'https://portfolio2-nemutas.vercel.app/'
+const title = 'Nemutas｜Portfolio'
+const description =
+	'This is the portfolio site of a web frontend engineer. Nemutas is my web handle.'
 
 class MyDocument extends Document {
 	render() {

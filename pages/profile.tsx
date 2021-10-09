@@ -1,88 +1,25 @@
-import anime from 'animejs';
 import { color } from 'csx';
 import { useRouter } from 'next/router';
-import React, { useEffect, useLayoutEffect, useRef, useState, VFC } from 'react';
-import { useRecoilState } from 'recoil';
+import React, { useRef, VFC } from 'react';
 import { css, SerializedStyles } from '@emotion/react';
 import { Layout } from '../components/layouts/Layout';
 import { Career } from '../components/profilePages/Career';
 import { Idea } from '../components/profilePages/Idea';
 import { Skill } from '../components/profilePages/Skill';
 import { ProfileStar } from '../components/stars/ProfileStar';
-import { starCenterPosition } from '../libs/store';
+import { useProfileMountAnimation, useProfileUnmountAnimation } from '../hooks/profileAnimations';
 
 const Profile: VFC = () => {
-	const [logoStartCenterPosition, setLogoStartCenterPosition] = useRecoilState(starCenterPosition)
 	const router = useRouter()
 	const logoRef = useRef<HTMLDivElement>(null)
 
-	useLayoutEffect(() => {
-		const isMoving = logoStartCenterPosition.x && logoStartCenterPosition.y
-
-		if (isMoving) {
-			logoRef.current!.style.top = `${logoStartCenterPosition.y}px`
-			logoRef.current!.style.left = `${logoStartCenterPosition.x}px`
-		}
-
-		const tl = anime.timeline({
-			duration: 200
-		})
-		tl.add({
-			targets: '#profile-logo',
-			boxShadow: '0 0 10px 15px rgba(0, 0, 0, 0.2)',
-			delay: 200
-		})
-			.add({
-				targets: '#profile-logo',
-				top: 0,
-				left: 0,
-				easing: 'easeInOutSine',
-				duration: () => (isMoving ? 1000 : 0),
-				delay: () => (isMoving ? 200 : 0)
-			})
-			.add({
-				targets: '#profile-text-line',
-				width: ['0%', '100%'],
-				easing: 'easeOutQuint',
-				duration: 2000
-			})
-			.add({
-				targets: '#profile-text-main',
-				translateY: [100, 0],
-				opacity: [0, 1],
-				duration: 1500
-			})
-			.add({
-				targets: '#profile-text-sub',
-				translateY: [-100, 0],
-				opacity: [0, 1],
-				duration: 1000
-			})
-			.add({
-				targets: [
-					'#profile-skill-button',
-					'#profile-career-button',
-					'#profile-idea-button',
-					'#profile-skill-sheet',
-					'#profile-career-sheet',
-					'#profile-idea-sheet'
-				],
-				scale: [0, 1]
-			})
-		tl.complete = () => setLogoStartCenterPosition({ x: undefined, y: undefined })
-	}, [])
+	// mount時のアニメーション
+	useProfileMountAnimation(logoRef)
 
 	/** logoをクリックしたとき（アニメーション実行後、homeへ戻る） */
 	const logoClickHandler = () => {
-		const rect = logoRef.current!.getBoundingClientRect()
-		logoRef.current!.style.zIndex = '10'
-		anime({
-			targets: '#profile-logo',
-			translateX: window.innerWidth / 2 - rect.width / 2,
-			translateY: window.innerHeight / 2 - rect.height / 2,
-			easing: 'easeInOutSine',
-			duration: 1000
-		})
+		// unmount時のアニメーション
+		useProfileUnmountAnimation(logoRef)
 
 		setTimeout(() => {
 			router.push('/')
@@ -152,6 +89,7 @@ const CategoryLayout: VFC<CategoryLayout> = props => {
 	const categoryClickHandler = () => {
 		buttonRef.current!.classList.toggle('active')
 		sheetRef.current!.classList.toggle('active')
+		paperRef.current!.classList.toggle('active')
 	}
 
 	return (
@@ -218,13 +156,14 @@ const styles = {
 		height: 90px;
 		overflow: hidden;
 		transform: scale(0);
-		transition: 0.8s;
+		transition: 1.2s;
 
 		&.active {
 			width: 100%;
 			height: 100%;
 			border-radius: 0;
 			z-index: 2;
+			transition: 0.8s;
 		}
 	`,
 	skillButton: css`
@@ -306,6 +245,13 @@ const styles = {
 		position: relative;
 		width: 100%;
 		height: 100%;
+		transform: translateY(100%);
+		transition: transform 0.5s;
+
+		&.active {
+			transform: translateY(0);
+			transition-delay: 1s;
+		}
 	`,
 	textContainer: css`
 		position: relative;

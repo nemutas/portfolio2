@@ -24,10 +24,22 @@ export const StarLayout: VFC<StarLayoutProps> = props => {
 	const [active, setActive] = useState(false)
 	const activeRef = useRef(false)
 	const radius = useRef(0)
+	const mousedownPos = useRef<{ x: number; y: number }>()
 
 	const clickHandler = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-		radius.current = calcMaxLengthToScreenCorner(e.clientX, e.clientY)
-		setActive(!active)
+		// mousedownした位置とclick（mouseup）した位置が同じならactiveを切り替える
+		if (
+			mousedownPos.current &&
+			mousedownPos.current.x === e.clientX &&
+			mousedownPos.current.y === e.clientY
+		) {
+			radius.current = calcMaxLengthToScreenCorner(e.clientX, e.clientY)
+			setActive(!active)
+		}
+	}
+
+	const mousedownHandler = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+		mousedownPos.current = { x: e.clientX, y: e.clientY }
 	}
 
 	useEffect(() => {
@@ -56,7 +68,8 @@ export const StarLayout: VFC<StarLayoutProps> = props => {
 	return (
 		<div
 			css={[styles.star(color), rotateTo && styles.rotateAnimation(rotateTo)]}
-			onClick={clickHandler}>
+			onClick={clickHandler}
+			onMouseDown={mousedownHandler}>
 			<div
 				ref={screenRef}
 				css={[styles.screen(color), active && styles.activeScreen(radius.current * 2)]}

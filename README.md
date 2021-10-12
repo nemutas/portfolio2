@@ -22,9 +22,9 @@ Applicationページでは、今までに作成した代表的なアプリケー
 # Technology
 * Next.js
 * Typescript
+* OGP（Open Graph Protcol）
 * [Framer Motion](https://www.framer.com/motion/)
 * [anime.js](https://animejs.com/)
-* OGP（Open Graph Protcol）
-* [emotion/react](https://emotion.sh/docs/introduction)
+* [Emotion（emotion/react）](https://emotion.sh/docs/introduction)
 
 # Detail

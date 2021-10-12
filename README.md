@@ -1,34 +1,30 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# About
+ポートフォリオサイトです。<br>
 
-## Getting Started
+https://portfolio2-nemutas.vercel.app/
 
-First, run the development server:
+<img src='https://user-images.githubusercontent.com/46724121/136976312-7792139a-d2ba-4f84-bafd-f7e2c52a7496.png' width='600px'>
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+# Feature
+このサイトの特徴です。
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Map Design
+トップページは、Google Mapのようにドラッグ操作によってスワイプできるデザインになっています。<br>
+画面内の情報量を抑えたり、サイトを見るだけではなく操作できことでユーザーの関心を惹く狙いがあります。
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+### ページ遷移
+トップページから、外部サイトリンクや、ページリンクを押したときに、次のページに違和感なく遷移するためのアニメーションを施しています。
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+### OGPを使用した外部データの取得
+Applicationページでは、今までに作成した代表的なアプリケーションを表示しています。<br>
+アプリケーションのイメージ画像やタイトル、説明は**OGP**（Open Graph Protcol）を通して取得しています。これによって、ポートフォリオサイト側で管理する情報を、アプリケーションのURLだけに抑えています。
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+# Technology
+* Next.js
+* Typescript
+* [Framer Motion](https://www.framer.com/motion/)
+* [anime.js](https://animejs.com/)
+* OGP（Open Graph Protcol）
+* [emotion/react](https://emotion.sh/docs/introduction)
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+# Detail

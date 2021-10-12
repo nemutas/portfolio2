@@ -30,3 +30,6 @@ Applicationページでは、今までに作成した代表的なアプリケー
 * [Emotion（emotion/react）](https://emotion.sh/docs/introduction)
 
 # 🐑Detail
+サイトを作成する上で調べたことなどは、Qiitaの記事にまとめています。<br>
+
+[【Next.js】ポートフォリオサイト作成まとめ](https://qiita.com/nemutas/private/e634f27ebfd4e39abe37)

@@ -66,11 +66,14 @@ export const useProfileMountAnimation = (logoRef: React.RefObject<HTMLDivElement
 export const useProfileUnmountAnimation = (logoRef: React.RefObject<HTMLDivElement>) => {
 	const rect = logoRef.current!.getBoundingClientRect()
 	logoRef.current!.style.zIndex = '10'
-	anime({
+	const tl = anime.timeline({ easing: 'easeInOutSine', duration: 1000 })
+	tl.add({
 		targets: '#profile-logo',
 		translateX: window.innerWidth / 2 - rect.width / 2,
-		translateY: window.innerHeight / 2 - rect.height / 2,
-		easing: 'easeInOutSine',
-		duration: 1000
+		translateY: window.innerHeight / 2 - rect.height / 2
+	}).add({
+		targets: '#profile-contents',
+		scale: [1, 0],
+		borderRadius: '50%'
 	})
 }

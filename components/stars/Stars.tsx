@@ -1,6 +1,7 @@
 import React, { useRef, VFC } from 'react';
 import { css } from '@emotion/react';
-import { AppStar } from './AppStar';
+import { ThemeColors } from '../../resources/themes';
+import { LinkedAppStar } from './AppStar';
 import { GithubStar } from './GithubStar';
 import { LinkPath } from './LinkPath';
 import { LinkedProfileStar } from './ProfileStar';
@@ -29,12 +30,12 @@ export const Stars: VFC = () => {
 				<QiitaStar />
 			</div>
 			<div ref={appRef} css={styles.app}>
-				<AppStar />
+				<LinkedAppStar />
 			</div>
-			<LinkPath startRef={profileRef} endRef={githubRef} color={'#fff'} />
-			<LinkPath startRef={profileRef} endRef={twitterRef} color={'#1da4f7'} />
-			<LinkPath startRef={profileRef} endRef={qiitaRef} color={'#53c300'} />
-			<LinkPath startRef={profileRef} endRef={appRef} color={'#fd7013'} />
+			<LinkPath startRef={profileRef} endRef={githubRef} color={ThemeColors.github} />
+			<LinkPath startRef={profileRef} endRef={twitterRef} color={ThemeColors.twitter} />
+			<LinkPath startRef={profileRef} endRef={qiitaRef} color={ThemeColors.qiita} />
+			<LinkPath startRef={profileRef} endRef={appRef} color={ThemeColors.application} />
 		</>
 	)
 }

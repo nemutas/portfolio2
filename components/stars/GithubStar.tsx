@@ -1,11 +1,12 @@
 import React, { VFC } from 'react';
 import { css, keyframes } from '@emotion/react';
+import { ThemeColors } from '../../resources/themes';
 import { GithubSVG } from '../svg/GithubSVG';
 import { StarLayout } from './StarLayout';
 
 export const GithubStar: VFC = () => {
 	return (
-		<StarLayout url={'https://github.com/nemutas'} color={'#fff'} rotateTo={-360}>
+		<StarLayout url={'https://github.com/nemutas'} color={ThemeColors.github} rotateTo={-360}>
 			<div css={styles.ring} />
 			<div css={styles.octo}>
 				<GithubSVG />

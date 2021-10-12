@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, VFC } from 'react';
 import { css } from '@emotion/react';
 import { skills } from '../../resources/skill';
+import { ThemeColors } from '../../resources/themes';
 
 export const Skill: VFC = () => {
 	const tooltipRef = useRef<HTMLDivElement>(null)
@@ -101,7 +102,7 @@ const styles = {
 		height: 100%;
 		padding: 20px;
 		background-color: rgba(0, 0, 0, 0.4);
-		border: 2px solid #2694ab;
+		border: 2px solid ${ThemeColors.profSkill};
 		box-shadow: 0 0 50px 20px rgba(0, 0, 0, 0.3);
 		border-radius: 20px;
 		display: grid;
@@ -129,7 +130,6 @@ const styles = {
 	`,
 	groupText: css`
 		font-size: clamp(2.5rem, 3vw, 4rem);
-		/* font-size: clamp(2rem, 2vw, 3rem); */
 		margin-bottom: 10px;
 	`,
 	iconContainer: css`

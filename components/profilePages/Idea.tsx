@@ -1,6 +1,7 @@
 import React, { VFC } from 'react';
 import { css } from '@emotion/react';
 import { IdeaDetail, ideas } from '../../resources/idea';
+import { ThemeColors } from '../../resources/themes';
 
 export const Idea: VFC = () => {
 	return (
@@ -51,7 +52,7 @@ const styles = {
 		height: 100%;
 		padding: 20px;
 		background-color: rgba(0, 0, 0, 0.4);
-		border: 2px solid #588133;
+		border: 2px solid ${ThemeColors.profIdea};
 		box-shadow: 0 0 50px 20px rgba(0, 0, 0, 0.3);
 		border-radius: 20px;
 		overflow: auto;

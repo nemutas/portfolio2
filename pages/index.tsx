@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion';
-import Head from 'next/head';
 import React, { useRef, VFC } from 'react';
 import { css } from '@emotion/react';
 import { Background } from '../components/Background';
@@ -57,7 +56,7 @@ const styles = {
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		border: 2px solid #44b3c2;
+		/* border: 2px solid #44b3c2; */
 	`,
 	text: css`
 		font-size: 5rem;

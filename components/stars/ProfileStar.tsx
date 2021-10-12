@@ -1,10 +1,11 @@
 import React, { VFC } from 'react';
 import { css, keyframes } from '@emotion/react';
+import { ThemeColors } from '../../resources/themes';
 import { StarLayout } from './StarLayout';
 
 export const LinkedProfileStar: VFC = () => {
 	return (
-		<StarLayout color={'#f6d04d'} href="/profile" autoCloseActiveScreen={false}>
+		<StarLayout color={ThemeColors.profile} href="/profile" autoCloseActiveScreen={false}>
 			<ProfileStar />
 		</StarLayout>
 	)
@@ -16,8 +17,8 @@ export const ProfileStar: VFC = () => {
 			return { char, color }
 		})
 	}
-	const mainText = textSplit('Nemutas', '#db0063')
-	const subText = textSplit('｜Web Frontend Engineer', '#1e1e1e')
+	const mainText = textSplit('Nemutas', ThemeColors.name)
+	const subText = textSplit('｜Web Frontend Engineer', ThemeColors.dark)
 	const text = [...mainText, ...subText]
 
 	return (

@@ -1,5 +1,6 @@
 import React, { useRef, VFC } from 'react';
 import { css } from '@emotion/react';
+import { ThemeColors } from '../../resources/themes';
 import { Astronout } from './Astronout';
 import { Astronout2 } from './Astronout2';
 import { Earth } from './Earth';
@@ -32,7 +33,7 @@ export const Objects: VFC = () => {
 			<div ref={rocketRef} css={styles.rocket}>
 				<Rocket />
 			</div>
-			<LinkPath startRef={rocketRef} endRef={astronoutRef} color={'#fff'} />
+			<LinkPath startRef={rocketRef} endRef={astronoutRef} color={ThemeColors.light} />
 		</>
 	)
 }

@@ -1,5 +1,6 @@
 import React, { VFC } from 'react';
 import { css, keyframes } from '@emotion/react';
+import { ThemeColors } from '../resources/themes';
 
 export const Background: VFC = () => {
 	const fixedParticleCount = 100
@@ -9,12 +10,12 @@ export const Background: VFC = () => {
 		<div css={styles.contianer}>
 			{[...Array(fixedParticleCount)].map((_, i) => (
 				<div key={i} css={styles.fixedParticleBox}>
-					<Particle colors={['white']} />
+					<Particle colors={[ThemeColors.light]} />
 				</div>
 			))}
 			{[...Array(randomParticleCount)].map((_, i) => (
 				<div key={i} css={styles.randomParticleBox}>
-					<Particle colors={['white', '#1da4f7', '#fd7013']} />
+					<Particle colors={[ThemeColors.light, ThemeColors.twitter, ThemeColors.application]} />
 				</div>
 			))}
 		</div>

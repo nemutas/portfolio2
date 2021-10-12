@@ -1,6 +1,7 @@
 import React, { VFC } from 'react';
 import { css } from '@emotion/react';
 import { CareerDetail, careers } from '../../resources/career';
+import { ThemeColors } from '../../resources/themes';
 
 export const Career: VFC = () => {
 	return (
@@ -61,7 +62,7 @@ const styles = {
 		height: 100%;
 		padding: 20px;
 		background-color: rgba(0, 0, 0, 0.4);
-		border: 2px solid #de4307;
+		border: 2px solid ${ThemeColors.profCareer};
 		box-shadow: 0 0 50px 20px rgba(0, 0, 0, 0.3);
 		border-radius: 20px;
 		overflow: auto;

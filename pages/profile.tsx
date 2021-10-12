@@ -1,4 +1,3 @@
-import { color } from 'csx';
 import { useRouter } from 'next/router';
 import React, { useRef, VFC } from 'react';
 import { css, SerializedStyles } from '@emotion/react';
@@ -8,6 +7,8 @@ import { Idea } from '../components/profilePages/Idea';
 import { Skill } from '../components/profilePages/Skill';
 import { ProfileStar } from '../components/stars/ProfileStar';
 import { useProfileMountAnimation, useProfileUnmountAnimation } from '../hooks/profileAnimations';
+import { lightColor } from '../libs/utils';
+import { ThemeColors } from '../resources/themes';
 
 const Profile: VFC = () => {
 	const router = useRouter()
@@ -23,34 +24,36 @@ const Profile: VFC = () => {
 
 		setTimeout(() => {
 			router.push('/')
-		}, 1200)
+		}, 2200)
 	}
 
 	return (
 		<Layout title="Profile｜Portforio">
 			<div css={styles.container}>
-				<ProfileText />
 				<div id="profile-logo" ref={logoRef} css={styles.logo} onClick={logoClickHandler}>
 					<ProfileStar />
 				</div>
-				<CategoryLayout
-					id="profile-skill"
-					buttonStyle={styles.skillButton}
-					sheetStyle={styles.skillSheet}>
-					<Skill />
-				</CategoryLayout>
-				<CategoryLayout
-					id="profile-career"
-					buttonStyle={styles.careerButton}
-					sheetStyle={styles.careerSheet}>
-					<Career />
-				</CategoryLayout>
-				<CategoryLayout
-					id="profile-idea"
-					buttonStyle={styles.ideaButton}
-					sheetStyle={styles.ideaSheet}>
-					<Idea />
-				</CategoryLayout>
+				<div id="profile-contents" css={styles.contents}>
+					<ProfileText />
+					<CategoryLayout
+						id="profile-skill"
+						buttonStyle={styles.skillButton}
+						sheetStyle={styles.skillSheet}>
+						<Skill />
+					</CategoryLayout>
+					<CategoryLayout
+						id="profile-career"
+						buttonStyle={styles.careerButton}
+						sheetStyle={styles.careerSheet}>
+						<Career />
+					</CategoryLayout>
+					<CategoryLayout
+						id="profile-idea"
+						buttonStyle={styles.ideaButton}
+						sheetStyle={styles.ideaSheet}>
+						<Idea />
+					</CategoryLayout>
+				</div>
 			</div>
 		</Layout>
 	)
@@ -62,7 +65,7 @@ const ProfileText: VFC = () => {
 	return (
 		<div css={styles.textContainer}>
 			<div id="profile-text-main" css={styles.mainText}>
-				Hi. I am <span style={{ color: '#db0063' }}>Nemutas</span>.
+				Hi. I am <span style={{ color: ThemeColors.name }}>Nemutas</span>.
 			</div>
 			<div id="profile-text-line" css={styles.textLine} />
 			<div id="profile-text-sub" css={styles.subText}>
@@ -115,10 +118,20 @@ const styles = {
 		position: relative;
 		width: 100vw;
 		height: 100vh;
-		background-color: #f6d04d;
+		background-color: #1e1e1e;
 		display: flex;
 		justify-content: center;
 		align-items: center;
+	`,
+	contents: css`
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		background-color: ${ThemeColors.profile};
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		overflow: hidden;
 	`,
 	logo: css`
 		position: absolute;
@@ -127,7 +140,7 @@ const styles = {
 		width: 200px;
 		height: 200px;
 		border-radius: 50%;
-		background-color: #f6d04d;
+		background-color: ${ThemeColors.profile};
 		transform: translate(-50%, -50%);
 		display: flex;
 		justify-content: center;
@@ -170,7 +183,7 @@ const styles = {
 		bottom: 0;
 		left: 0;
 		border-top-right-radius: 100%;
-		background-color: #2694ab;
+		background-color: ${ThemeColors.profSkill};
 		box-shadow: 5px -5px 10px 10px rgba(0, 0, 0, 0.2);
 		transform-origin: bottom left;
 		/* icon */
@@ -179,7 +192,7 @@ const styles = {
 		background-position: bottom 10px left 10px;
 
 		&.active {
-			background-color: ${color('#2694ab').lighten(0.05).toString()};
+			background-color: ${lightColor(ThemeColors.profSkill, 0.05)};
 			box-shadow: 2px -2px 5px 5px rgba(0, 0, 0, 0.2);
 			background-position: bottom 5px left 5px;
 		}
@@ -188,14 +201,14 @@ const styles = {
 		bottom: 0;
 		left: 0;
 		border-top-right-radius: 100%;
-		background-color: #2694ab;
+		background-color: ${ThemeColors.profSkill};
 		transform-origin: bottom left;
 	`,
 	careerButton: css`
 		top: 0;
 		right: 0;
 		border-bottom-left-radius: 100%;
-		background-color: #de4307;
+		background-color: ${ThemeColors.profCareer};
 		box-shadow: -5px 5px 10px 10px rgba(0, 0, 0, 0.2);
 		transform-origin: top right;
 		/* icon */
@@ -204,7 +217,7 @@ const styles = {
 		background-position: top 10px right 10px;
 
 		&.active {
-			background-color: ${color('#de4307').lighten(0.05).toString()};
+			background-color: ${lightColor(ThemeColors.profCareer, 0.05)};
 			box-shadow: -2px 2px 5px 5px rgba(0, 0, 0, 0.2);
 			background-position: top 5px right 5px;
 		}
@@ -213,14 +226,14 @@ const styles = {
 		top: 0;
 		right: 0;
 		border-bottom-left-radius: 100%;
-		background-color: #de4307;
+		background-color: ${ThemeColors.profCareer};
 		transform-origin: top right;
 	`,
 	ideaButton: css`
 		bottom: 0;
 		right: 0;
 		border-top-left-radius: 100%;
-		background-color: #588133;
+		background-color: ${ThemeColors.profIdea};
 		box-shadow: -5px -5px 10px 10px rgba(0, 0, 0, 0.2);
 		transform-origin: bottom right;
 		/* icon */
@@ -229,7 +242,7 @@ const styles = {
 		background-position: bottom 10px right 10px;
 
 		&.active {
-			background-color: ${color('#588133').lighten(0.05).toString()};
+			background-color: ${lightColor(ThemeColors.profIdea, 0.05)};
 			box-shadow: -2px -2px 5px 5px rgba(0, 0, 0, 0.2);
 			background-position: bottom 5px right 5px;
 		}
@@ -238,7 +251,7 @@ const styles = {
 		bottom: 0;
 		right: 0;
 		border-top-left-radius: 100%;
-		background-color: #588133;
+		background-color: ${ThemeColors.profIdea};
 		transform-origin: bottom right;
 	`,
 	paper: css`
@@ -260,17 +273,17 @@ const styles = {
 	`,
 	mainText: css`
 		font-size: max(5vw, 3rem);
-		color: #1e1e1e;
+		color: ${ThemeColors.dark};
 		padding-right: max(5vw, 10px);
 	`,
 	subText: css`
 		font-size: max(3vw, 2rem);
-		color: #1e1e1e;
+		color: ${ThemeColors.dark};
 		padding-right: 50px;
 	`,
 	textLine: css`
 		width: 100%;
 		height: max(0.3vw, 2px);
-		background-color: #1e1e1e;
+		background-color: ${ThemeColors.dark};
 	`
 }

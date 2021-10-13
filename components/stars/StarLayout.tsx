@@ -27,11 +27,11 @@ export const StarLayout: VFC<StarLayoutProps> = props => {
 	const mousedownPos = useRef<{ x: number; y: number }>()
 
 	const clickHandler = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-		// mousedownした位置とclick（mouseup）した位置が同じならactiveを切り替える
+		// mousedownした位置とclick（mouseup）した位置が許容値以内ならactiveを切り替える
 		if (
 			mousedownPos.current &&
-			mousedownPos.current.x === e.clientX &&
-			mousedownPos.current.y === e.clientY
+			Math.abs(mousedownPos.current.x - e.clientX) < 5 &&
+			Math.abs(mousedownPos.current.y - e.clientY) < 5
 		) {
 			radius.current = calcMaxLengthToScreenCorner(e.clientX, e.clientY)
 			setActive(!active)
